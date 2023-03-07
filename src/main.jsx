@@ -17,7 +17,10 @@ const router = createBrowserRouter([
     element: <PostDetails></PostDetails>,
   },
 ]);
-
+console.log(
+  "%cCreated By Islam Said",
+  "color:white;background-color:#673ab7;font-size:30px;;font-weight:bold;border-radius:10px;padding:10px"
+);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>

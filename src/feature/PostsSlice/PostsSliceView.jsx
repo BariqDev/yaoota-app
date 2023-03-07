@@ -19,14 +19,13 @@ export const randomDate = () => {
   const start = new Date().getTime();
   const end = new Date().getTime() * Math.random() * 1000;
   const randomTime = Math.random() * (end - start);
-  return new Date(randomTime).toUTCString();
+  return new Date(randomTime).toDateString();
 };
 
 const PostSliceView = () => {
   const dispatch = useDispatch();
 
   const { activePosts, loading } = useSelector((state) => state.posts);
-  console.log(loading);
   useEffect(() => {
     dispatch(fetchPosts());
   }, []);
@@ -41,7 +40,7 @@ const PostSliceView = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Container maxWidth='xl'>
+        <Container maxWidth="xl">
           <SearchPosts />
           <Grid container spacing={3} mt={4}>
             {activePosts.map((post) => {
@@ -50,14 +49,17 @@ const PostSliceView = () => {
                   <Card sx={{ minWidth: 275, height: 200 }} elevation={3}>
                     <CardHeader
                       avatar={
-                        <Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'></Avatar>
+                        <Avatar
+                          sx={{ bgcolor: deepPurple[500] }}
+                          aria-label="recipe"
+                        ></Avatar>
                       }
                       title={"user id is " + post.id}
                       subheader={randomDate()}
                     />
 
                     <CardContent sx={{ height: 50 }}>
-                      <Typography variant='body2' color='text.secondary'>
+                      <Typography variant="body2" color="text.secondary">
                         {post.title}{" "}
                       </Typography>
                     </CardContent>
@@ -71,7 +73,7 @@ const PostSliceView = () => {
                         }}
                       >
                         <Button
-                          size='small'
+                          size="small"
                           sx={{
                             color: deepPurple[500],
                             fontWeight: 500,
@@ -87,11 +89,16 @@ const PostSliceView = () => {
             })}
           </Grid>
 
-          <Stack direction='row' alignItems='center' justifyContent='center' mt={4}>
-            {!loading && (
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            mt={4}
+          >
+            {!loading && pages > 1 && (
               <Pagination
                 count={pages}
-                color='primary'
+                color="primary"
                 onChange={(e, page) => handleChange(page)}
                 sx={{ backgroundColor: "white", borderRadius: 5, p: 1 }}
               />

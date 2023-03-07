@@ -41,9 +41,14 @@ const PostDetails = () => {
     return comments.map((comment) => (
       <Card elevation={3} key={comment.id}>
         <CardHeader
-          avatar={<Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'></Avatar>}
+          avatar={
+            <Avatar
+              sx={{ bgcolor: deepPurple[500] }}
+              aria-label="recipe"
+            ></Avatar>
+          }
           title={comment.text}
-          subheader={new Date().toLocaleDateString()}
+          subheader={new Date().toDateString()}
         />
       </Card>
     ));
@@ -69,13 +74,18 @@ const PostDetails = () => {
       ) : (
         <Card sx={{ m: "auto", mt: 4, maxWidth: "70%" }}>
           <CardHeader
-            avatar={<Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'></Avatar>}
+            avatar={
+              <Avatar
+                sx={{ bgcolor: deepPurple[500] }}
+                aria-label="recipe"
+              ></Avatar>
+            }
             title={activePost.title}
-            subheader={new Date().toUTCString()}
+            subheader={new Date().toDateString()}
           />
 
           <CardContent>
-            <Typography variant='body2' color='text.secondary' mb={2}>
+            <Typography variant="body2" color="text.secondary" mb={2}>
               {activePost.body}
             </Typography>
             <Divider />
@@ -83,25 +93,28 @@ const PostDetails = () => {
           <CardActions disableSpacing>
             <CommentTextField
               multiline
-              placeholder='type your comment'
-              id='comment'
+              placeholder="type your comment"
+              id="comment"
               onChange={(e) => setComment(e.target.value)}
               InputProps={{
                 startAdornment: (
-                  <InputAdornment position='start'>
-                    <AccountCircle fontSize='large' />
+                  <InputAdornment position="start">
+                    <AccountCircle fontSize="large" />
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <InputAdornment position='start'>
-                    <Button sx={{ color: deepPurple[500] }} onClick={() => handleComment()}>
-                      <ChatBubbleOutlineIcon fontSize='large' />
+                  <InputAdornment position="start">
+                    <Button
+                      sx={{ color: deepPurple[500] }}
+                      onClick={() => handleComment()}
+                    >
+                      <ChatBubbleOutlineIcon fontSize="large" />
                     </Button>
                   </InputAdornment>
                 ),
               }}
-              variant='outlined'
-              size='medium'
+              variant="outlined"
+              size="medium"
             />
           </CardActions>
           {comments.length > 0 && getComments()}

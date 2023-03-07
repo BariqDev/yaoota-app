@@ -3,8 +3,10 @@ import axios from "axios";
 
 const initialState = {
   posts: [],
+  searchedPosts: [],
   activePosts: [],
   activePost: {},
+  isAppliedFilter: false,
   loading: true,
   pages: 0,
   error: "",
@@ -33,11 +35,27 @@ const postsSlice = createSlice({
     getPostsByPage: (state, action) => {
       const end = parseInt(action.payload) * 20;
       const start = end - 20;
-      console.log(start, end);
-      state.activePosts = state.posts.slice(start, end);
+      if (state.isAppliedFilter) {
+        state.activePosts = state.searchedPosts.slice(start, end);
+
+      } else {
+        state.activePosts = state.posts.slice(start, end);
+
+      }
     },
-    serchPosts: (state, action) => {
-      state.activePosts = state.posts.filter((post) => post.includes(action.payload));
+    searchPosts: (state, action) => {
+      if (action.payload) {
+        const result = state.posts.filter((post) => post.title.includes(action.payload));
+        state.searchedPosts = result;
+        state.isAppliedFilter = true;
+        state.activePosts = result.slice(0, 19);
+        state.pages = Math.ceil(result.length / 20);
+      } else {
+        state.searchedPosts = [];
+        state.isAppliedFilter = false;
+        state.activePosts = state.posts.slice(0, 19)
+        state.pages = Math.ceil(state.posts.length / 20)
+      }
     },
   },
   extraReducers: (builder) => {
@@ -51,7 +69,7 @@ const postsSlice = createSlice({
       state.error = "";
       state.posts = action.payload;
       state.activePosts = action.payload.slice(0, 19);
-      state.pages = Math.round(action.payload.length / 20);
+      state.pages = Math.ceil(action.payload.length / 20);
     });
     builder.addCase(fetchPostById.pending, (state, action) => {
       state.loading = true;
@@ -63,4 +81,4 @@ const postsSlice = createSlice({
   },
 });
 export default postsSlice.reducer;
-export const { getPostsByPage, serchPosts } = postsSlice.actions;
+export const { getPostsByPage, searchPosts } = postsSlice.actions;
