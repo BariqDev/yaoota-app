@@ -51,22 +51,17 @@ const PostSliceView = () => {
               return (
                 <Grid item xs={12} md={4} lg={3} key={post.id}>
                   <Card sx={{ minWidth: 275, height: 200 }} elevation={3}>
-                    <CardHeader
-                      avatar={
-                        <Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'></Avatar>
-                      }
-                      title={"user id is " + post.id}
-                      subheader={randomDate()}
-                    />
-
-                    <CardContent sx={{ height: 50 }}>
+                    <CardContent sx={{ height: 120 }}>
+                      <Typography gutterBottom variant='h5' component='div'>
+                        {post.title.length > 29 ? `${post.title.substr(0, 22)} ...` : post.title}
+                      </Typography>
                       <Typography variant='body2' color='text.secondary'>
-                        {post.title}{" "}
+                        {post.body.length > 150 ? `${post.body.substr(0, 147)} ...` : post.body}
                       </Typography>
                     </CardContent>
                     <CardActions>
                       <NavLink
-                        to={"/post/" + post.id}
+                        to={`/post/${post.id}`}
                         style={{
                           textDecoration: "none",
                           color: "inherit",

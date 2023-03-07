@@ -7,23 +7,41 @@ const initialState = {
   activePosts: [],
   activePost: {},
   isAppliedFilter: false,
+  comments: [],
   loading: true,
+  user: {},
   pages: 0,
   error: "",
 };
 export const fetchPosts = createAsyncThunk("posts/fetch", async () => {
   try {
     const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts");
+
     return data;
   } catch (error) {
     console.log(error);
   }
 });
 
-export const fetchPostById = createAsyncThunk("posts/fetchPost", async (id) => {
+export const fetchPostDetails = createAsyncThunk("posts/fetchPost", async (postId) => {
   try {
-    const { data } = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
-    return data;
+    const postResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+    const post = postResponse.data;
+
+    const commentsResponse = await axios.get(
+      `https://jsonplaceholder.typicode.com/posts/${postId}/comments`
+    );
+    const comments = commentsResponse.data;
+
+    const userId = post["userId"];
+    const usersResponse = await axios.get(`https://jsonplaceholder.typicode.com/users`);
+    const user = usersResponse.data.find((user) => user.id == userId);
+
+    return {
+      post,
+      user,
+      comments,
+    };
   } catch (error) {
     console.log(error);
   }
@@ -37,10 +55,8 @@ const postsSlice = createSlice({
       const start = end - 20;
       if (state.isAppliedFilter) {
         state.activePosts = state.searchedPosts.slice(start, end);
-
       } else {
         state.activePosts = state.posts.slice(start, end);
-
       }
     },
     searchPosts: (state, action) => {
@@ -53,8 +69,8 @@ const postsSlice = createSlice({
       } else {
         state.searchedPosts = [];
         state.isAppliedFilter = false;
-        state.activePosts = state.posts.slice(0, 19)
-        state.pages = Math.ceil(state.posts.length / 20)
+        state.activePosts = state.posts.slice(0, 19);
+        state.pages = Math.ceil(state.posts.length / 20);
       }
     },
   },
@@ -71,11 +87,13 @@ const postsSlice = createSlice({
       state.activePosts = action.payload.slice(0, 19);
       state.pages = Math.ceil(action.payload.length / 20);
     });
-    builder.addCase(fetchPostById.pending, (state, action) => {
+    builder.addCase(fetchPostDetails.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(fetchPostById.fulfilled, (state, action) => {
-      state.activePost = action.payload;
+    builder.addCase(fetchPostDetails.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.activePost = action.payload.post;
+      state.comments = action.payload.comments;
       state.loading = false;
     });
   },
