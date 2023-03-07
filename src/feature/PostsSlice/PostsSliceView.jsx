@@ -40,26 +40,23 @@ const PostSliceView = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Container maxWidth="xl">
+        <Container maxWidth='xl'>
           <SearchPosts />
           <Grid container spacing={3} mt={4}>
             {activePosts.map((post) => {
               return (
-                <Grid item xs={6} md={4} lg={3} key={post.id}>
+                <Grid item xs={12} md={4} lg={3} key={post.id}>
                   <Card sx={{ minWidth: 275, height: 200 }} elevation={3}>
                     <CardHeader
                       avatar={
-                        <Avatar
-                          sx={{ bgcolor: deepPurple[500] }}
-                          aria-label="recipe"
-                        ></Avatar>
+                        <Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'></Avatar>
                       }
                       title={"user id is " + post.id}
                       subheader={randomDate()}
                     />
 
                     <CardContent sx={{ height: 50 }}>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant='body2' color='text.secondary'>
                         {post.title}{" "}
                       </Typography>
                     </CardContent>
@@ -73,7 +70,7 @@ const PostSliceView = () => {
                         }}
                       >
                         <Button
-                          size="small"
+                          size='small'
                           sx={{
                             color: deepPurple[500],
                             fontWeight: 500,
@@ -89,16 +86,11 @@ const PostSliceView = () => {
             })}
           </Grid>
 
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            mt={4}
-          >
+          <Stack direction='row' alignItems='center' justifyContent='center' mt={4}>
             {!loading && pages > 1 && (
               <Pagination
                 count={pages}
-                color="primary"
+                color='primary'
                 onChange={(e, page) => handleChange(page)}
                 sx={{ backgroundColor: "white", borderRadius: 5, p: 1 }}
               />
