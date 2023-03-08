@@ -5,14 +5,12 @@ const initialState = {
   posts: [],
   searchedPosts: [],
   activePosts: [],
-  activePost: {},
   isAppliedFilter: false,
-  comments: [],
   loading: true,
-  user: {},
   pages: 0,
   error: "",
 };
+
 export const fetchPosts = createAsyncThunk("posts/fetch", async () => {
   try {
     const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts");
@@ -23,29 +21,7 @@ export const fetchPosts = createAsyncThunk("posts/fetch", async () => {
   }
 });
 
-export const fetchPostDetails = createAsyncThunk("posts/fetchPost", async (postId) => {
-  try {
-    const postResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`);
-    const post = postResponse.data;
 
-    const commentsResponse = await axios.get(
-      `https://jsonplaceholder.typicode.com/posts/${postId}/comments`
-    );
-    const comments = commentsResponse.data;
-
-    const userId = post["userId"];
-    const usersResponse = await axios.get(`https://jsonplaceholder.typicode.com/users`);
-    const user = usersResponse.data.find((user) => user.id == userId);
-
-    return {
-      post,
-      user,
-      comments,
-    };
-  } catch (error) {
-    console.log(error);
-  }
-});
 const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -73,9 +49,7 @@ const postsSlice = createSlice({
         state.pages = Math.ceil(state.posts.length / 20);
       }
     },
-    addComment: (state, action) => {
-      state.comments = [...state.comments, action.payload];
-    },
+
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPosts.pending, (state, action) => {
@@ -90,16 +64,8 @@ const postsSlice = createSlice({
       state.activePosts = action.payload.slice(0, 19);
       state.pages = Math.ceil(action.payload.length / 20);
     });
-    builder.addCase(fetchPostDetails.pending, (state, action) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchPostDetails.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-      state.activePost = action.payload.post;
-      state.comments = action.payload.comments;
-      state.loading = false;
-    });
+
   },
 });
 export default postsSlice.reducer;
-export const { getPostsByPage, searchPosts, addComment } = postsSlice.actions;
+export const { getPostsByPage, searchPosts } = postsSlice.actions;

@@ -6,15 +6,19 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import store from "./store";
 import Home from "./pages/Home";
-import PostDetails from "./component/PostDetails/PostDetails";
+import PostDetailsView from "./feature/PostDetailsSlice/PostDetailsView";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home>Hello world!</Home>,
+    element: <Home></Home>,
   },
   {
     path: "/post/:postId",
-    element: <PostDetails></PostDetails>,
+    element: <PostDetailsView></PostDetailsView>,
+  },
+  {
+    path: "/user/:userId",
+    element: <Home></Home>,
   },
 ]);
 console.log(
