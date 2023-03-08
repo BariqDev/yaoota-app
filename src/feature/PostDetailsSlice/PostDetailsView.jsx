@@ -17,6 +17,7 @@ import { Stack } from "@mui/system";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import { addComment, fetchPostDetails } from "./PostDetailsSlice";
 import Loader from "./../../component/Loader/Loader";
+import { scrollTop } from "../PostsSlice/PostsSliceView";
 
 const CommentTextField = styled(TextField)({
   width: "98%",
@@ -63,15 +64,14 @@ const PostDetailsView = () => {
     name: "islam said",
     body: "",
   });
-  const { loading, user, comments, activePost } = useSelector(
-    (state) => state.postDetails
-  );
+  const { loading, user, comments, activePost } = useSelector((state) => state.postDetails);
 
   const { postId } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchPostDetails(postId));
+    scrollTop();
   }, [postId]);
 
   const handleComment = () => {
@@ -88,17 +88,17 @@ const PostDetailsView = () => {
     return comments.map((comment) => (
       <Card elevation={4} key={comment.id} sx={{ mb: 1 }}>
         <CardContent>
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Stack direction='row' alignItems='center' spacing={2}>
             <Avatar
               sx={{ bgcolor: deepPurple[500] }}
-              aria-label="recipe"
+              aria-label='recipe'
               {...stringAvatar(comment.name)}
             ></Avatar>
-            <Stack direction="column">
-              <Typography variant="body1" color="text.primary">
+            <Stack direction='column'>
+              <Typography variant='body1' color='text.primary'>
                 {comment.email}
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant='body1' color='text.secondary'>
                 {comment.body}
               </Typography>
             </Stack>
@@ -115,15 +115,15 @@ const PostDetailsView = () => {
         <Card sx={{ m: "auto", mt: 4, maxWidth: "70%" }}>
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: deepPurple[500] }} aria-label="recipe">
+              <Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'>
                 {user.name.substr(0, 1)}
               </Avatar>
             }
             title={user.name}
             subheader={
-              <Stack direction="column" spacing={1}>
+              <Stack direction='column' spacing={1}>
                 <Typography
-                  variant="body2"
+                  variant='body2'
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -131,32 +131,32 @@ const PostDetailsView = () => {
                     justifyContent: "start",
                     mt: "5px",
                   }}
-                  color="rgba(0, 0, 0, 0.6)"
+                  color='rgba(0, 0, 0, 0.6)'
                 >
-                  <CallIcon fontSize="small" /> {user.phone}
+                  <CallIcon fontSize='small' /> {user.phone}
                 </Typography>
                 <Typography
-                  variant="body2"
+                  variant='body2'
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     gap: 1,
                     justifyContent: "start",
                   }}
-                  color="rgba(0, 0, 0, 0.6)"
+                  color='rgba(0, 0, 0, 0.6)'
                 >
-                  <ApartmentIcon fontSize="small" /> {user.company.name}
+                  <ApartmentIcon fontSize='small' /> {user.company.name}
                 </Typography>
               </Stack>
             }
           />
 
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant='h5' component='div'>
               {activePost.title}
             </Typography>
 
-            <Typography variant="body1" color="text.secondary" mb={2}>
+            <Typography variant='body1' color='text.secondary' mb={2}>
               {activePost.body}
             </Typography>
             <Divider />
@@ -164,29 +164,26 @@ const PostDetailsView = () => {
           <CardActions disableSpacing>
             <CommentTextField
               multiline
-              placeholder="type your comment"
-              id="comment"
+              placeholder='type your comment'
+              id='comment'
               value={comment.body}
               onChange={(e) => setComment({ ...comment, body: e.target.value })}
               InputProps={{
                 startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircle fontSize="large" />
+                  <InputAdornment position='start'>
+                    <AccountCircle fontSize='large' />
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <InputAdornment position="start">
-                    <Button
-                      sx={{ color: deepPurple[500] }}
-                      onClick={() => handleComment()}
-                    >
-                      <ChatBubbleOutlineIcon fontSize="large" />
+                  <InputAdornment position='start'>
+                    <Button sx={{ color: deepPurple[500] }} onClick={() => handleComment()}>
+                      <ChatBubbleOutlineIcon fontSize='large' />
                     </Button>
                   </InputAdornment>
                 ),
               }}
-              variant="outlined"
-              size="medium"
+              variant='outlined'
+              size='medium'
             />
           </CardActions>
           {comments.length > 0 && getComments()}
@@ -200,7 +197,7 @@ const PostDetailsView = () => {
               }}
             >
               <Button
-                size="large"
+                size='large'
                 sx={{
                   color: deepPurple[500],
                   fontWeight: "bold",

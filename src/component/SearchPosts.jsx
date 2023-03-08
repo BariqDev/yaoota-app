@@ -5,7 +5,7 @@ import { deepPurple } from "@mui/material/colors";
 import { Stack } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch } from "react-redux";
-import { searchPosts } from "../feature/PostsSlice/Postslice";
+import { searchPosts } from "../feature/PostsSlice/PostsSlice";
 const CommentTextField = styled(TextField)({
   width: "98%",
   m: "auto",
@@ -22,26 +22,26 @@ const CommentTextField = styled(TextField)({
 const SearchPosts = () => {
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
-  const handleSearch = () => {
-    dispatch(searchPosts(search));
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    dispatch(searchPosts(e.target.value));
   };
   return (
-    <Stack direction="row" justifyContent="center" alignItems="center" mt={2}>
+    <Stack direction='row' justifyContent='center' alignItems='center' mt={2} mb={1}>
       <CommentTextField
         sx={{ width: 400 }}
-        placeholder="search by title"
-        id="search"
-        onChange={(e) => setSearch(e.target.value)}
+        placeholder='search by title'
+        id='search'
+        onChange={handleSearch}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="start">
-              <Button sx={{ color: deepPurple[500] }} onClick={handleSearch}>
-                <SearchIcon fontSize="large" />
-              </Button>
+            <InputAdornment position='start'>
+              <SearchIcon fontSize='large' sx={{ color: deepPurple[500] }} />
             </InputAdornment>
           ),
         }}
-        size="medium"
+        size='medium'
       />
     </Stack>
   );
