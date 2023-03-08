@@ -73,6 +73,9 @@ const postsSlice = createSlice({
         state.pages = Math.ceil(state.posts.length / 20);
       }
     },
+    addComment: (state, action) => {
+      state.comments = [...state.comments, action.payload];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPosts.pending, (state, action) => {
@@ -99,4 +102,4 @@ const postsSlice = createSlice({
   },
 });
 export default postsSlice.reducer;
-export const { getPostsByPage, searchPosts } = postsSlice.actions;
+export const { getPostsByPage, searchPosts, addComment } = postsSlice.actions;

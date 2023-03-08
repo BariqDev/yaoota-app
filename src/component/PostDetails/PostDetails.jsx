@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -9,7 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { deepPurple } from "@mui/material/colors";
-import { fetchPostDetails, fetchPosts } from "../../feature/PostsSlice/Postslice.js";
+import { fetchPostDetails, addComment } from "../../feature/PostsSlice/Postslice.js";
 import { Button, Divider, InputAdornment, TextField } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -17,6 +17,7 @@ import Loader from "../Loader/Loader.jsx";
 import CallIcon from "@mui/icons-material/Call";
 import { Stack } from "@mui/system";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+
 const CommentTextField = styled(TextField)({
   width: "98%",
   m: "auto",
@@ -28,8 +29,40 @@ const CommentTextField = styled(TextField)({
   },
 });
 
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+  };
+}
+
 const PostDetails = () => {
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState({
+    email: "islam.sa3idzak@gmail.com",
+    name: "islam said",
+    body: "",
+  });
   const { activePost, loading, user, comments } = useSelector((state) => state.posts);
   const { postId } = useParams();
   const dispatch = useDispatch();
@@ -39,27 +72,26 @@ const PostDetails = () => {
   }, [postId]);
 
   const handleComment = () => {
-    if (!comment) {
-      return;
+    if (comment.body) {
+      dispatch(addComment(comment));
+      setComment({
+        ...comment,
+        body: "",
+      });
     }
-    setComments([
-      ...comments,
-      {
-        id: Math.random(),
-        text: comment,
-      },
-    ]);
   };
 
   const getComments = () => {
     return comments.map((comment) => (
-      <Card elevation={4}>
+      <Card elevation={4} key={comment.id} sx={{ mb: 1 }}>
         <CardContent>
           <Stack direction='row' alignItems='center' spacing={2}>
-            <Avatar sx={{ bgcolor: deepPurple[500] }} aria-label='recipe'>
-              {comment.email.substr(0, 1)}
-            </Avatar>
-            <Stack direction='column' spacing={1}>
+            <Avatar
+              sx={{ bgcolor: deepPurple[500] }}
+              aria-label='recipe'
+              {...stringAvatar(comment.name)}
+            ></Avatar>
+            <Stack direction='column'>
               <Typography variant='body1' color='text.primary'>
                 {comment.email}
               </Typography>
@@ -126,7 +158,8 @@ const PostDetails = () => {
               multiline
               placeholder='type your comment'
               id='comment'
-              onChange={(e) => setComment(e.target.value)}
+              value={comment.body}
+              onChange={(e) => setComment({ ...comment, body: e.target.value })}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -145,7 +178,27 @@ const PostDetails = () => {
               size='medium'
             />
           </CardActions>
-          {getComments()}
+          {comments.length > 0 && getComments()}
+          <CardActions mt={2}>
+            <NavLink
+              to={`/post/`}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                fontWeight: "bold",
+              }}
+            >
+              <Button
+                size='large'
+                sx={{
+                  color: deepPurple[500],
+                  fontWeight: "bold",
+                }}
+              >
+                VIEW All POSTS
+              </Button>
+            </NavLink>
+          </CardActions>
         </Card>
       )}
     </>
