@@ -25,7 +25,7 @@ const SearchPosts = () => {
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-    dispatch(searchPosts(e.target.value));
+    dispatch(searchPosts(e.target.value.toLowerCase()));
   };
   return (
     <Stack direction='row' justifyContent='center' alignItems='center' mt={2} mb={1}>
