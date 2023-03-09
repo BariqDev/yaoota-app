@@ -14,7 +14,7 @@ import Loader from "../../component/Loader/Loader";
 import { Pagination } from "@mui/material";
 import { Stack } from "@mui/system";
 import SearchPosts from "../../component/SearchPosts";
-
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 export const randomDate = () => {
   const start = new Date().getTime();
   const end = new Date().getTime() * Math.random() * 1000;
@@ -57,7 +57,12 @@ const PostSliceView = () => {
           {userId && (
             <Card elevation={3}>
               <CardContent>
-                <Typography variant='h6'> Posts By {userName}</Typography>
+                <Stack direction='row' alignItems='center' justifyContent='space-between'>
+                  <Typography variant='h6'> Posts By {userName}</Typography>
+                  <NavLink to='../'>
+                    <HighlightOffIcon fontSize='large' />
+                  </NavLink>
+                </Stack>
               </CardContent>
             </Card>
           )}
